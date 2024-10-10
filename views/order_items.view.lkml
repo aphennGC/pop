@@ -84,12 +84,12 @@ view: order_items {
     label: "WTD"
     view_label: "_PoP"
     type: yesno
-    sql:  (EXTRACT(DOW FROM ${created_raw}) < EXTRACT(DOW FROM GETDATE())
+    sql:  (EXTRACT(DOW FROM ${created_raw}) < EXTRACT(DAY FROM GETDATE())
                     OR
-                (EXTRACT(DOW FROM ${created_raw}) = EXTRACT(DOW FROM GETDATE()) AND
+                (EXTRACT(DOW FROM ${created_raw}) = EXTRACT(DAY FROM GETDATE()) AND
                 EXTRACT(HOUR FROM ${created_raw}) < EXTRACT(HOUR FROM GETDATE()))
                     OR
-                (EXTRACT(DOW FROM ${created_raw}) = EXTRACT(DOW FROM GETDATE()) AND
+                (EXTRACT(DOW FROM ${created_raw}) = EXTRACT(DAY FROM GETDATE()) AND
                 EXTRACT(HOUR FROM ${created_raw}) <= EXTRACT(HOUR FROM GETDATE()) AND
                 EXTRACT(MINUTE FROM ${created_raw}) < EXTRACT(MINUTE FROM GETDATE())))  ;;
   }
