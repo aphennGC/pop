@@ -8,19 +8,28 @@ include: "/views/*.view.lkml"                # include all views in the views/ f
 # # and define the joins that connect them together.
 #
 explore: order_items {
-join: orders {
-relationship: many_to_one
-sql_on: ${order_items.order_id} =${orders.order_id} ;;
-}
-join: users {
+  label: "PoP Explore 🗓"
+join: inventory_items {
+  type: left_outer
+  sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
   relationship: many_to_one
-  sql_on:${order_items.user_id}=${users.id} ;;
-}
 }
 
-  explore: pop_arbitrary {
-    label: "PoP Method 6: Compare two arbitrary date ranges"
-    always_filter: {
-      filters: [first_period_filter: "NOT NULL", second_period_filter: "NOT NULL", period_selected:"-NULL"]
-    }
-  }
+join: orders {
+  type: left_outer
+  sql_on: ${order_items.order_id} = ${orders.order_id} ;;
+  relationship: many_to_one
+}
+
+join: products {
+  type: left_outer
+  sql_on: ${inventory_items.product_id} = ${products.id} ;; ##indirect join
+  relationship: many_to_one
+}
+
+join: users {
+  type: left_outer
+  sql_on: ${orders.user_id} = ${users.id} ;;
+  relationship: many_to_one
+}
+}
