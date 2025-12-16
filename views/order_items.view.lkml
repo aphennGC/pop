@@ -8,7 +8,6 @@ view: order_items {
     sql: ${TABLE}.id ;;
   }
   dimension_group: created {
-    view_label: "_PoP"
     type: time
     timeframes: [raw, time, date, hour_of_day,day_of_week,day_of_week_index,week,week_of_year, day_of_month,day_of_year,month,month_name,month_num, quarter, year]
     sql: ${TABLE}.created_at ;;
