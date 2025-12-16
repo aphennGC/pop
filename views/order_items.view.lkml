@@ -72,60 +72,10 @@ view: order_items {
 
   measure: total_sale_price {
     label: "Total Sales"
-    view_label: "_PoP"
     type: sum
     sql: ${sale_price} ;;
     value_format_name: usd
     drill_fields: [created_date]
-  }
-  #####(Method 1a) you may also wish to create MTD and YTD filters in LookML
-  dimension: wtd_only {
-    group_label: "To-Date Filters"
-    label: "WTD"
-    view_label: "_PoP"
-    type: yesno
-    sql:  (EXTRACT(DAY FROM ${created_raw}) < EXTRACT(DAY FROM CURRENT_TIMESTAMP())
-                    OR
-                (EXTRACT(DAY FROM ${created_raw}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP()) AND
-                EXTRACT(HOUR FROM ${created_raw}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP()))
-                    OR
-                (EXTRACT(DAY FROM ${created_raw}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP()) AND
-                EXTRACT(HOUR FROM ${created_raw}) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP()) AND
-                EXTRACT(MINUTE FROM ${created_raw}) < EXTRACT(MINUTE FROM CURRENT_TIMESTAMP())))  ;;
-  }
-
-  dimension: mtd_only {
-    group_label: "To-Date Filters"
-    label: "MTD"
-    view_label: "_PoP"
-    type: yesno
-    sql: (
-          EXTRACT(DAY FROM ${created_raw}) < EXTRACT(DAY FROM CURRENT_TIMESTAMP())
-            OR
-          (EXTRACT(DAY FROM ${created_raw}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP()) AND
-           EXTRACT(HOUR FROM ${created_raw}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP()))
-            OR
-          (EXTRACT(DAY FROM ${created_raw}) = EXTRACT(DAY FROM CURRENT_TIMESTAMP()) AND
-           EXTRACT(HOUR FROM ${created_raw}) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP()) AND
-           EXTRACT(MINUTE FROM ${created_raw}) < EXTRACT(MINUTE FROM CURRENT_TIMESTAMP()))
-        );;
-  }
-
-  dimension: ytd_only {
-    group_label: "To-Date Filters"
-    label: "YTD"
-    view_label: "_PoP"
-    type: yesno
-    sql: (
-          (DATE_DIFF(${created_raw}, DATE_TRUNC(${created_raw}, YEAR), DAY) + 1) < DATE_DIFF(CURRENT_DATE(), DATE_TRUNC(CURRENT_DATE(), YEAR), DAY) + 1
-            OR
-          (DATE_DIFF(${created_raw}, DATE_TRUNC(${created_raw}, YEAR), DAY) + 1) = DATE_DIFF(CURRENT_DATE(), DATE_TRUNC(CURRENT_DATE(), YEAR), DAY) + 1 AND
-          EXTRACT(HOUR FROM ${created_raw}) < EXTRACT(HOUR FROM CURRENT_TIMESTAMP())
-            OR
-          (DATE_DIFF(${created_raw}, DATE_TRUNC(${created_raw}, YEAR), DAY) + 1) = DATE_DIFF(CURRENT_DATE(), DATE_TRUNC(CURRENT_DATE(), YEAR), DAY) + 1 AND
-          EXTRACT(HOUR FROM ${created_raw}) <= EXTRACT(HOUR FROM CURRENT_TIMESTAMP()) AND
-          EXTRACT(MINUTE FROM ${created_raw}) < EXTRACT(MINUTE FROM CURRENT_TIMESTAMP())
-        );;
   }
 
   # ----- Sets of fields for drilling ------
